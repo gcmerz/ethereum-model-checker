@@ -14,91 +14,86 @@ STOP() = [execution_halt == 0]
 			} -> Skip 
 		[] FAILURE; 
 
-// adds top two stack elements 
-ADD() = [stack_pos > 1 && execution_halt == 0]
+ADD() = [stack_pos >= 2 && execution_halt == 0]
 			add{
-				stack[stack_pos - 1] = stack[stack_pos - 1] + stack[stack_pos]; 
+				stack[stack_pos - 2] = stack[stack_pos - 2] + stack[stack_pos - 1]; 
 				stack_pos--
 			} -> Skip
 		[] FAILURE; 
-
-// multiples top two stack elements
-MUL() = [stack_pos > 1 && execution_halt == 0]
+MUL() = [stack_pos >= 2 && execution_halt == 0]
 			mul{
-				stack[stack_pos - 1] = stack[stack_pos - 1] * stack[stack_pos]; 
+				stack[stack_pos - 2] = stack[stack_pos - 2] * stack[stack_pos - 1]; 
 				stack_pos--
 			} -> Skip
 		[] FAILURE; 
-
-// substracts element on top of stack from element before it
-SUB() = [stack_pos > 1 && execution_halt == 0]
+SUB() = [stack_pos >= 2 && execution_halt == 0]
 			sub{
-				stack[stack_pos - 1] = stack[stack_pos - 1] - stack[stack_pos]; 
+				stack[stack_pos - 2] = stack[stack_pos - 2] - stack[stack_pos - 1]; 
 				stack_pos--
 			} -> Skip
 		[] FAILURE;
 
 // division by 0 supported
-DIV() = [stack_pos > 1 && execution_halt == 0]
+DIV() = [stack_pos >= 2 && execution_halt == 0]
 			div{
-				if(stack[stack_pos - 1] == 0) {
-					stack[stack_pos - 1] = 0; 
+				if(stack[stack_pos - 2] == 0) {
+					stack[stack_pos - 2] = 0; 
 					stack_pos--
 				}
 				else {
-					stack[stack_pos - 1] = stack[stack_pos - 1] / stack[stack_pos]; 
+					stack[stack_pos - 2] = stack[stack_pos - 2] / stack[stack_pos - 1]; 
 					stack_pos--; 
 				}
 			} -> Skip
 		[] FAILURE;
 
-MOD() = [stack_pos > 1 && execution_halt == 0]
+MOD() = [stack_pos > 2 && execution_halt == 0]
 			mod{
-				if(stack[stack_pos - 1] == 0) {
-					stack[stack_pos - 1] = 0; 
+				if(stack[stack_pos - 2] == 0) {
+					stack[stack_pos - 2] = 0; 
 					stack_pos--
 				}
 				else {
-					stack[stack_pos - 1] = stack[stack_pos - 1] % stack[stack_pos]; 
+					stack[stack_pos - 2] = stack[stack_pos - 2] % stack[stack_pos - 1]; 
 					stack_pos--; 
 				}
 			} -> Skip
 		[] FAILURE;
 
-
-ADDMOD() = [stack_pos > 2 && execution_halt == 0]
+ADDMOD() = [stack_pos > 3 && execution_halt == 0]
 			addmod{
-				if(stack[stack_pos] == 0) {
-					stack[stack_pos - 2] = 0;
+				if(stack[stack_pos - 1] == 0) {
+					stack[stack_pos - 3] = 0;
 					stack_pos = stack_pos - 2;
 				}
 				else {
-					stack[stack_pos - 2] = (stack[stack_pos - 2] + stack[stack_pos - 1]) % stack[stack_pos]; 
+					stack[stack_pos - 3] = (stack[stack_pos - 3] + stack[stack_pos - 2]) % stack[stack_pos - 1]; 
 					stack_pos = stack_pos - 2; 
 				}
 			} -> Skip
 		[] FAILURE;
 
-MULMOD() = [stack_pos > 2 && execution_halt == 0]
+MULMOD() = [stack_pos > 3 && execution_halt == 0]
 			addmod{
-				if(stack[stack_pos] == 0) {
-					stack[stack_pos - 2] = 0;
+				if(stack[stack_pos - 1] == 0) {
+					stack[stack_pos - 3] = 0;
 					stack_pos = stack_pos - 2;
 				}
 				else {
-					stack[stack_pos - 2] = (stack[stack_pos - 2] * stack[stack_pos - 1]) % stack[stack_pos]; 
+					stack[stack_pos - 3] = (stack[stack_pos - 3] * stack[stack_pos - 2]) % stack[stack_pos - 1]; 
 					stack_pos = stack_pos - 2; 
 				}
 			} -> Skip
 		[] FAILURE;
 
-EXP() = [stack_pos > 1 && execution_halt == 0]
+EXP() = [stack_pos >= 3 && execution_halt == 0]
 			exp{
-				var count = stack[stack_pos];
-				var elt = stack[stack_pos - 1];
+				var count = stack[stack_pos - 1];
+				var elt = stack[stack_pos - 2];
 				// unclear if they have exponentiation?
 				while(count > 0) {
-					stack[stack_pos - 1] = stack[stack_pos - 1] * elt;
+					stack[stack_pos - 2] = stack[stack_pos - 2] * elt;
+					count--;
 				}
 				stack_pos--; 
 			} -> Skip

@@ -1,4 +1,8 @@
-#include "arithmetic_operations.csp"; 
+#include "arithmetic_operations.csp";
+#include "stack_manipulation.csp";
 
-
-
+TEST1() = PUSH(5); PUSH(2); ADD();
+#define goal1 stack_pos == 1;
+#define goal2 stack[stack_pos] == 7;
+#assert TEST1 reaches goal1; 
+#assert TEST1 reaches goal2;

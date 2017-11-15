@@ -1,0 +1,11 @@
+#include "environment_conditions.csp"; 
+#include "gas_prices.csp"; 
+
+// TODO: Need to figure out how to model the program counter, 
+// for now just give push arguments
+PUSH(push_arg) = [stack_pos < STACK_SIZE - 1 && execution_halt == 0]
+		push{
+			stack[stack_pos] = push_arg;
+			stack_pos++;
+		} -> Skip
+	[] FAILURE;
