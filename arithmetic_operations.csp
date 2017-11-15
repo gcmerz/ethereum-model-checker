@@ -1,4 +1,4 @@
-// ARITHMETIC OPERATIONS
+﻿// ARITHMETIC OPERATIONS
 // declares all of the arithmetic operations
 // and stop function. 
 
@@ -50,7 +50,7 @@ SUB() = sub{
 	} -> GAS_SUB(); 
 
 
-// division by 0 supported
+// division by 0 supported in the EVM
 DIV() = div{
 		if (stack_pos >= 2 && execution_halt == 0) {
 			if(stack[stack_pos - 2] == 0) {
@@ -122,7 +122,7 @@ EXP(num_bytes) = exp{
 		if (stack_pos >= 3 && execution_halt == 0) {
 				var count = stack[stack_pos - 1];
 				var elt = stack[stack_pos - 2];
-				// unclear if they have exponentiation?
+				// PAT doesn't have an exponentiation operator :(
 				while(count > 0) {
 					stack[stack_pos - 2] = stack[stack_pos - 2] * elt;
 					count--;

@@ -1,7 +1,7 @@
-// COMPARISON AND BITWISE LOGIC
+﻿// COMPARISON AND BITWISE LOGIC
 // declares comparison and bitwise logic operators
 #include "environment_conditions.csp";
-#include "gas_prices.csp";
+#include "gas_calculations.csp";
 LT() = lt{
 	if (stack_pos >= 2 && execution_halt == 0) {
 		if (stack[stack_pos - 1] < stack[stack_pos - 2]) {
@@ -16,7 +16,7 @@ LT() = lt{
 	else {
 		failure = 1;
 	}
-} -> Skip; 
+} -> GAS_LT(); 
 
 GT() = gt{
 	if (stack_pos >= 2 && execution_halt == 0) {
@@ -32,7 +32,7 @@ GT() = gt{
 	else {
 		failure = 1;
 	}
-} -> Skip; 
+} -> GAS_GT(); 
 
 // SLT() = ;
 
@@ -52,7 +52,7 @@ EQ() = eq{
 	else {
 		failure = 1;
 	}
-} -> Skip; 
+} -> GAS_EQ(); 
 
 ISZERO() = iszero{
 	if (stack_pos >= 1 && execution_halt == 0) {
@@ -66,7 +66,7 @@ ISZERO() = iszero{
 	else {
 		failure = 1;
 	}
-} -> Skip; 
+} -> GAS_ISZERO(); 
 
 
 AND() = and{
@@ -77,7 +77,7 @@ AND() = and{
 	else {
 		failure = 1;
 	}
-} -> Skip; 
+} -> GAS_AND(); 
 
 XOR() = exor{
 	if (stack_pos >= 2 && execution_halt == 0) {
@@ -87,7 +87,7 @@ XOR() = exor{
 	else {
 		failure = 1;
 	}
-} -> Skip; 
+} -> GAS_XOR(); 
 
 OR() = or{
 	if (stack_pos >= 2 && execution_halt == 0) {
@@ -97,7 +97,7 @@ OR() = or{
 	else {
 		failure = 1;
 	}
-} -> Skip; 
+} -> GAS_OR(); 
 
 NOT() = not{
 	if (stack_pos >= 1 && execution_halt == 0) {
@@ -106,7 +106,7 @@ NOT() = not{
 	else {
 		failure = 1;
 	}
-} -> Skip;
+} -> GAS_NOT();
 
 
 
