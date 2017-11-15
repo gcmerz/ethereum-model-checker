@@ -1,28 +1,39 @@
-#include "arithmetic_operations.csp";
+﻿#include "arithmetic_operations.csp";
 #include "stack_manipulation.csp";
 #include "cmp_bitwise.csp";
 
-// jumps will be translated recursively as follows:
-// 0. set jump_ct = 0
-// 1. go to the instruction being jumped to, j_dest
-// 2. write processes for all instructions after j_dest until a STOP or another jump
-//		2.a if another jump, go back to 1
-// 3. ....
+P0() = PUSH(1); P1();
+P1() = PUSH(0); P2();
+P2() = MSTORE(); P3();
+P3() = PUSH(16); P4();
+P4() = PUSH(0); P5();
+P5() = MLOAD(); P6();
+P6() = PUSH(0); P7();
+P7() = MLOAD(); P8();
+P8() = ADD(); P9();
+P9() = PUSH(0); P10();
+P10() = MSTORE(); P11();
+P11() = PUSH(0); P12();
+P12() = MLOAD(); P13();
+P13() = EQ(); P14();
+P14() = [stack[stack_pos - 1] == 0]JUMP_PROC(3) [] P15();
+P15() = STOP();
 
-// pretend count is held in memory for now...
-var ct = 0;
-P0() = PUSH(12);
-P1() = PUSH(ct);
-P2() = PUSH(ct);
-P3() = ADD();
-P4() = EQ(); 
-P5() = p{ct++;} -> Skip;
-// simulates a "jump if equal loop" yay for mutual recursion!
-// right now stack_pos doesn't get updated after so simulation will look weird
-P6() = [stack[stack_pos - 1] == 0]PJUMP0() [] [stack[stack_pos - 1] == 1]Skip;
-PJUMP0() = P0(); P1(); P2(); P3(); P4(); P5(); P6();
-P7() = STOP();
-PCONTRACT() = P0(); P1(); P2(); P3(); P4(); P5(); P6(); P7(); 
+JUMP_PROC(JUMP_ARG) = [JUMP_ARG == 0]P0() [] 
+[JUMP_ARG == 1]P1() []
+[JUMP_ARG == 2]P2() []
+[JUMP_ARG == 3]P3() []
+[JUMP_ARG == 4]P4() []
+[JUMP_ARG == 5]P5() []
+[JUMP_ARG == 6]P6() []
+[JUMP_ARG == 7]P7() []
+[JUMP_ARG == 8]P8() []
+[JUMP_ARG == 9]P9() []
+[JUMP_ARG == 10]P10() []
+[JUMP_ARG == 11]P11();
+
+
+PCONTRACT = P0();
 
 #define never_fail failure == 0;
 #define sufficient_gas gas > 0;

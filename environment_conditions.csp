@@ -1,17 +1,42 @@
-// ENVIRONMENT CONDITIONS
+﻿// ENVIRONMENT CONDITIONS
 // file that declares environment variables
 // including the stack as well as variables that
 // tell us whether our execution halted or failed
 
-// maximium size of the stack is 1024
+// limit size of stack for ease of implementation
 #define STACK_SIZE 1024;
 
 // let's define the stack as a size 1024 array for now
+// and memory as well because who needs 2^256 entries
+// (espcially if we're not actually copying code)
 var stack = [0(STACK_SIZE)]; 
-// how to represent memory? it's a lot :(
-var gas = 15;
+var memory = [0(STACK_SIZE)];
+
+var gas = 10;
 var stack_pos = 0;
+var m_pos = 0;
 
 // define execution variables 
 var execution_halt = 0; 
 var failure = 0;
+
+// environmental information (random numbers)
+var address = 0;
+var balance = 1000;
+var origin = 0;
+var caller = 0;
+var callvalue = 0;
+var calldataload = 0;
+var calldatacopy = 0;
+var codesize = 100;
+var gasprice = 10;
+var extcodesize = codesize;
+
+// block information (also random numbers right now)
+var blockhash = 10;
+var coinbase = 10;
+var timestamp = 1;
+var number = 10;
+var difficulty = 10;
+var gaslimit = 100;
+

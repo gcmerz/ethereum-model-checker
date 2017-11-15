@@ -34,3 +34,25 @@ SWAP(swap_arg) = swap{
 		failure = 1;
 	}
 } -> GAS_SWAP();
+
+MSTORE() = mstore{
+	if (stack_pos >= 2) {
+		memory[stack[stack_pos - 1]] = stack[stack_pos - 2];
+		stack_pos--;
+		stack_pos--;
+		// m_pos = max(stack_pos - 1, m_pos);
+	}
+	else {
+		failure = 1;
+	}
+} -> GAS_MSTORE();
+
+MLOAD() = mload{
+	if (stack_pos < STACK_SIZE) {
+		stack[stack_pos - 1] = memory[stack[stack_pos - 1]];
+		// m_pos = max(stack_pos - 1, m_pos);
+	}
+	else {
+		failure = 1;
+	}
+} -> GAS_MLOAD();
