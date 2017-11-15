@@ -1,0 +1,37 @@
+// GAS PRICES
+// declares all constant gas prices + refunds for operations
+#define GZERO 0; // paid for operations of the set WZero
+#define GBASE 2; // paid for operations of the set WBase
+#define GVERYLOW 3; // ... 
+#define GLOW 5; // ...
+#define GMID 8; // ... 
+#define GHIGH 10; // ..
+#define GEXTCODE 700; // ..
+#define GBALANCE 400; // paid for BALANCE operation
+#define GSLOAD 200; // ammount paid for SLOAD operation
+#define GJUMPDEST 1; // ammount paid for JUMPDEST operation
+#define GSSET 20000; // paid for an SSTORE operation when the storage value is set to non-zero from zero
+#define GSRESET 5000; // paid for an SSTORE operation when the storage value's zeroness remains unchanged or is set to zero
+#define RSCLEAR 15000; // refund given when the storage value is set to zero from non-zero
+#define RSUICIDE 24000; // refund given to a refund counter for suiciding an account
+#define GSUICIDE 5000; // ammount paid for SUICIDE operation
+#define GCREATE 32000; // ammount paid for CREATE operation
+#define GCODEDDEPOSIT 200; // paid PER BYTE for a CREATE operation to succeed in placing code in to state
+#define GCALL 700; // ammount paid for a CALL operation
+#define GCALLVALUE 9000; // ammount paid for a non-zero value transfer as part of the call operation
+#define GCALLSTIPED 2300; // a stipend for the called contract subtracted from GCALLBALUE for a non-zero value transfer
+#define GNEWACCOUNT 25000; // paid for a CALL or SUICIDE operation which creates an account
+#define GEXP 10; // partial payment for EXP operation
+#define GEXPBYTE 10; // partial payment when multiplied by log_256(exp) for the EXP operation
+#define GMEMORY 3; // paid for every additional word when expanding memory 
+#define TXCREATE 32000; // paid for all contract-creating transactions after the Homestead transaction
+#define GTXDATAZERO 4; // paid for every zero byte of data or code for a transaction
+#define GTXDATANONZERO 68; // paid for every non-zero byte of data or code for a transaction
+#define GTRANSACTIOn 21000; // paid for every transaction
+#define GLOG 375; // partial payment for log operation 
+#define GLOGDATA 8; // paid for each byte in a LOG operation's data
+#define GLOGTOPIC 375; // paid for each topic of a LOG operation
+#define GSHA3 30; // paid for each sha3 operation
+#define GSHA3WORD 6; // paid for each word (rounded up) for input data to a SHA3 operation
+#define GCOPY 3; // partial payment for *COPY operations, multiplied by words copied, rounded up
+#define GBLOCKHASH 20; // payment for BLOCKHASH operation
