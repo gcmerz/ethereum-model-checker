@@ -3,9 +3,12 @@
 
 // TODO: Need to figure out how to model the program counter, 
 // for now just give push arguments
-PUSH(push_arg) = [stack_pos < STACK_SIZE - 1 && execution_halt == 0]
-		push{
-			stack[stack_pos] = push_arg;
-			stack_pos++;
-		} -> Skip
-	[] FAILURE;
+PUSH(push_arg) = push{
+			if (stack_pos < STACK_SIZE - 1 && execution_halt == 0) {
+				stack[stack_pos] = push_arg;
+				stack_pos++;
+			}
+			else {
+				failure = 1;
+			}
+		} -> Skip;

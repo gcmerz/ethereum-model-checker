@@ -8,60 +8,83 @@
 #include "gas_prices.csp";
 
 // stop, asserts we havne't already stopped and then changes flag
-STOP() = [execution_halt == 0]
-			stop{
+STOP() =  stop{
+			if (execution_halt == 0) {
 				execution_halt = 1; 
-			} -> Skip 
-		[] FAILURE; 
+			}
+			else {
+				failure = 1; 
+			} 
+		} -> Stop;
 
-ADD() = [stack_pos >= 2 && execution_halt == 0]
-			add{
+ADD() = add{
+		if(stack_pos >= 2 && execution_halt == 0) {
 				stack[stack_pos - 2] = stack[stack_pos - 2] + stack[stack_pos - 1]; 
-				stack_pos--
-			} -> Skip
-		[] FAILURE; 
-MUL() = [stack_pos >= 2 && execution_halt == 0]
-			mul{
-				stack[stack_pos - 2] = stack[stack_pos - 2] * stack[stack_pos - 1]; 
-				stack_pos--
-			} -> Skip
-		[] FAILURE; 
-SUB() = [stack_pos >= 2 && execution_halt == 0]
-			sub{
-				stack[stack_pos - 2] = stack[stack_pos - 2] - stack[stack_pos - 1]; 
-				stack_pos--
-			} -> Skip
-		[] FAILURE;
+				stack_pos--;
+		}
+		else {
+			failure = 1;
+		}
+	} -> Skip;
+ 
+MUL() = mul{
+		if(stack_pos >= 2 && execution_halt == 0) {
+			stack[stack_pos - 2] = stack[stack_pos - 2] * stack[stack_pos - 1]; 
+			stack_pos--;
+		}
+		else {
+			failure = 1;
+		}
+	} -> Skip;
+
+
+SUB() = sub{
+		if(stack_pos >= 2 && execution_halt == 0) {
+			stack[stack_pos - 2] = stack[stack_pos - 2] - stack[stack_pos - 1]; 
+			stack_pos--
+		}
+		else {
+			failure = 1;
+		}
+	} -> Skip; 
+
 
 // division by 0 supported
-DIV() = [stack_pos >= 2 && execution_halt == 0]
-			div{
-				if(stack[stack_pos - 2] == 0) {
-					stack[stack_pos - 2] = 0; 
-					stack_pos--
-				}
-				else {
-					stack[stack_pos - 2] = stack[stack_pos - 2] / stack[stack_pos - 1]; 
-					stack_pos--; 
-				}
-			} -> Skip
-		[] FAILURE;
+DIV() = div{
+		if (stack_pos >= 2 && execution_halt == 0) {
+			if(stack[stack_pos - 2] == 0) {
+				stack[stack_pos - 2] = 0; 
+				stack_pos--
+			}
+			else {
+				stack[stack_pos - 2] = stack[stack_pos - 2] / stack[stack_pos - 1]; 
+				stack_pos--; 
+			}
+		}
+		else {
+			failure = 1;
+		}
+	} -> Skip;
 
-MOD() = [stack_pos > 2 && execution_halt == 0]
-			mod{
-				if(stack[stack_pos - 2] == 0) {
-					stack[stack_pos - 2] = 0; 
-					stack_pos--
-				}
-				else {
-					stack[stack_pos - 2] = stack[stack_pos - 2] % stack[stack_pos - 1]; 
-					stack_pos--; 
-				}
-			} -> Skip
-		[] FAILURE;
 
-ADDMOD() = [stack_pos > 3 && execution_halt == 0]
-			addmod{
+MOD() = mod{
+		if (stack_pos > 2 && execution_halt == 0) {
+			if(stack[stack_pos - 2] == 0) {
+				stack[stack_pos - 2] = 0; 
+				stack_pos--
+			}
+			else {
+				stack[stack_pos - 2] = stack[stack_pos - 2] % stack[stack_pos - 1]; 
+				stack_pos--; 
+			}
+		}
+		else {
+			failure = 1;
+		}
+	} -> Skip;
+
+ADDMOD() = addmod{
+			if (stack_pos > 3 && execution_halt == 0) {
 				if(stack[stack_pos - 1] == 0) {
 					stack[stack_pos - 3] = 0;
 					stack_pos = stack_pos - 2;
@@ -70,11 +93,15 @@ ADDMOD() = [stack_pos > 3 && execution_halt == 0]
 					stack[stack_pos - 3] = (stack[stack_pos - 3] + stack[stack_pos - 2]) % stack[stack_pos - 1]; 
 					stack_pos = stack_pos - 2; 
 				}
-			} -> Skip
-		[] FAILURE;
+			}
+			else {
+				failure = 1;
+			}
+	} -> Skip;
 
-MULMOD() = [stack_pos > 3 && execution_halt == 0]
-			addmod{
+
+MULMOD() = mulmod{
+			if (stack_pos > 3 && execution_halt == 0) {
 				if(stack[stack_pos - 1] == 0) {
 					stack[stack_pos - 3] = 0;
 					stack_pos = stack_pos - 2;
@@ -83,11 +110,15 @@ MULMOD() = [stack_pos > 3 && execution_halt == 0]
 					stack[stack_pos - 3] = (stack[stack_pos - 3] * stack[stack_pos - 2]) % stack[stack_pos - 1]; 
 					stack_pos = stack_pos - 2; 
 				}
-			} -> Skip
-		[] FAILURE;
+			}
+			else {
+				failure = 1;
+			}
+	} -> Skip;
 
-EXP() = [stack_pos >= 3 && execution_halt == 0]
-			exp{
+
+EXP() = exp{
+		if (stack_pos >= 3 && execution_halt == 0) {
 				var count = stack[stack_pos - 1];
 				var elt = stack[stack_pos - 2];
 				// unclear if they have exponentiation?
@@ -96,5 +127,8 @@ EXP() = [stack_pos >= 3 && execution_halt == 0]
 					count--;
 				}
 				stack_pos--; 
-			} -> Skip
-		[] FAILURE;
+		}
+		else {
+			failure = 1;
+		}
+	} -> Skip;
