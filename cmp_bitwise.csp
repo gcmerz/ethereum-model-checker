@@ -1,0 +1,114 @@
+// COMPARISON AND BITWISE LOGIC
+// declares comparison and bitwise logic operators
+#include "environment_conditions.csp";
+#include "gas_prices.csp";
+
+LT() = lt{
+	if (stack_pos >= 2 && execution_halt == 0) {
+		if (stack[stack_pos - 1] < stack[stack_pos - 2]) {
+			stack[stack_pos - 2] = 1;
+			stack[stack_pos]--;
+		}
+		else {
+			stack[stack_pos - 2] = 0;
+			stack[stack_pos]--;
+		}
+	}
+	else {
+		failure = 1;
+	}
+} -> Skip; 
+
+GT() = gt{
+	if (stack_pos >= 2 && execution_halt == 0) {
+		if (stack[stack_pos - 1] > stack[stack_pos - 2]) {
+			stack[stack_pos - 2] = 1;
+			stack[stack_pos]--;
+		}
+		else {
+			stack[stack_pos - 2] = 0;
+			stack[stack_pos]--;
+		}
+	}
+	else {
+		failure = 1;
+	}
+} -> Skip; 
+
+// SLT() = ;
+
+// SGT() = ;
+
+EQ() = eq{
+	if (stack_pos >= 2 && execution_halt == 0) {
+		if (stack[stack_pos - 1] == stack[stack_pos - 2]) {
+			stack[stack_pos - 2] = 1;
+			stack[stack_pos]--;
+		}
+		else {
+			stack[stack_pos - 2] = 0;
+			stack[stack_pos]--;
+		}
+	}
+	else {
+		failure = 1;
+	}
+} -> Skip; 
+
+ISZERO() = iszero{
+	if (stack_pos >= 1 && execution_halt == 0) {
+		if (stack[stack_pos - 1] == 0) {
+			stack[stack_pos - 1] = 1;
+		}
+		else {
+			stack[stack_pos - 1] = 0;
+		}
+	}
+	else {
+		failure = 1;
+	}
+} -> Skip; 
+
+
+AND() = and{
+	if (stack_pos >= 2 && execution_halt == 0) {
+		stack[stack_pos - 2] = stack[stack_pos - 1] & stack[stack_pos - 2];
+		stack_pos--;
+	}
+	else {
+		failure = 1;
+	}
+} -> Skip; 
+
+XOR() = exor{
+	if (stack_pos >= 2 && execution_halt == 0) {
+		stack[stack_pos - 2] = stack[stack_pos - 1] ^ stack[stack_pos - 2];
+		stack_pos--;
+	}
+	else {
+		failure = 1;
+	}
+} -> Skip; 
+
+OR() = or{
+	if (stack_pos >= 2 && execution_halt == 0) {
+		stack[stack_pos - 2] = stack[stack_pos - 1] | stack[stack_pos - 2];
+		stack_pos--;
+	}
+	else {
+		failure = 1;
+	}
+} -> Skip; 
+
+NOT() = not{
+	if (stack_pos >= 1 && execution_halt == 0) {
+		stack[stack_pos - 1] = ~stack[stack_pos - 1];
+	}
+	else {
+		failure = 1;
+	}
+} -> Skip;
+
+
+
+// SHA3() = ;
