@@ -1,0 +1,114 @@
+#include "gas_prices.csp"
+#include "environment_conditions.csp"
+
+// TODO: Call, suicide, store
+
+// exp operation gas price
+GAS_EXP() = gas_exp{
+	if (stack[stack_pos - 2] = 0) {
+		gas = gas - GEXP;
+	}
+	else {
+		// todo -- this should actually
+		// calculate the number of bytes
+		// maybe handle this in translation?
+		if(stack[stack_pos - 2] > 0) {
+			gas = gas - GEXP - (GEXPBYTE * 1);
+		}
+		else {
+			failure = 1;
+		}
+	}
+} -> Skip;
+
+// decrements gas by gas_arg
+GAS_DECREMENT(gas_arg) = gas_decrement{
+	gas = gas - gas_arg;
+} -> Skip;
+
+// page 21 of ethereum yellow paper
+GAS_COPY() = GAS_DECREMENT(GVERYLOW + GCOPY * (stack[stack_pos - 3] + 1 / 32)));
+GAS_EXTCOPY() = GAS_DECREMENT((GEXTCODE + GCOPY * (stack[stack_pos - 4] + 1 / 32)));
+GAS_LOG(log_arg) = GAS_DECREMENT((GLOF + GLOGDATA * (stack[stack_pos - 2] +  (log_arg * GLOGTOPIC))));
+GAS_CREATE() = GAS_DECREMENT(GCREATE);
+GAS_JUMPDEST() = GAS_DECREMENT(GJUMPDEST);
+GAS_SLOAD() = GAS_DECREMENT(GSLOAD);
+GAS_ZERO() = GAS_DECREMENT(GZERO);
+GAS_BASE() = GAS_DECREMENT(GBASE);
+GAS_VERYLOW() = GAS_DECREMENT(GVERYLOW);
+GAS_LOW() = GAS_DECREMENT(GLOW);
+GAS_MID() = GAS_DECREMENT(GMID);
+GAS_HIGH() = GAS_DECREMENT(GHIGH);
+GAS_EXTCODE() = GAS_DECREMENT(GEXTCODE);
+GAS_BALANCE() = GAS_DECREMENT(GBALANCE);
+GAS_BLOCKHASH() = GAS_DECREMENT(GBLOCKHASH);
+
+// below we alias all of the above functions to be 
+// command specific for readability 
+// Wzero
+GAS_STOP() = GAS_ZERO();
+GAS_RETURN() = GAS_ZERO();
+
+// Wbase
+GAS_ADDRESS() = GAS_BASE();
+GAS_ORIGIN() = GAS_BASE();
+GAS_CALLER() = GAS_BASE();
+GAS_CALLVALUE() = GAS_BASE();
+GAS_CALLDATASIZE() = GAS_BASE();
+GAS_CODESIZE() = GAS_BASE();
+GAS_GASPRICE() = GAS_BASE();
+GAS_COINBASE() = GAS_BASE();
+GAS_TIMESTAMP() = GAS_BASE();
+GAS_NUMBER() = GAS_BASE();
+GAS_DIFFICULTY() = GAS_BASE();
+GAS_GASLIMIT() = GAS_BASE();
+GAS_POP() = GAS_BASE();
+GAS_PC() = GAS_BASE(); 
+GAS_MSIZE() = GAS_BASE();
+GAS_GAS() = GAS_BASE();
+
+// Wverylow
+GAS_ADD() = GAS_VERYLOW();
+GAS_SUB() = GAS_VERYLOW();
+GAS_NOT() = GAS_VERYLOW();
+GAS_LT() = GAS_VERYLOW();
+GAS_GT() = GAS_VERYLOW();
+GAS_SLT() = GAS_VERYLOW();
+GAS_SGT() = GAS_VERYLOW();
+GAS_EQ() = GAS_VERYLOW();
+GAS_ISZERO() = GAS_VERYLOW();
+GAS_AND() = GAS_VERYLOW();
+GAS_OR() = GAS_VERYLOW();
+GAS_XOR() = GAS_VERYLOW();
+GAS_BYTE() = GAS_VERYLOW();
+GAS_CALLDATALOAD() = GAS_VERYLOW();
+GAS_MLOAD() = GAS_VERYLOW();
+GAS_MSTORE() = GAS_VERYLOW();
+GAS_MSTOR8() = GAS_VERYLOW();
+GAS_PUSH() = GAS_VERYLOW();
+GAS_DUP() = GAS_VERYLOW();
+GAS_SWAP() = GAS_VERYLOW();
+
+// Wlow
+GAS_MUL() = GAS_LOW();
+GAS_DIV() = GAS_LOW();
+GAS_SDIV() = GAS_LOW();
+GAS_MOD() = GAS_LOW();
+GAS_SMOD() = GAS_LOW();
+GAS_SIGNEXTEND() = GAS_LOW();
+
+// Wmid
+GAS_ADDMOD() = GAS_MID();
+GAS_MULMOD() = GAS_MID();
+GAS_JUMP() = GAS_MID();
+
+// Whigh
+GAS_JUMPI() = GAS_HIGH();
+
+// Wextcode
+GAS_EXTCODEZIZE() = GAS_EXTCODE();
+
+
+
+
+
