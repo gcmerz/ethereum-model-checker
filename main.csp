@@ -1,18 +1,30 @@
 #include "arithmetic_operations.csp";
 #include "stack_manipulation.csp";
+#include "cmp_bitwise.csp";
 
-TEST1() = PUSH(5) ; PUSH(7); ADD(); STOP();
+// jumps will be translated recursively as follows:
+// 0. set jump_ct = 0
+// 1. go to the instruction being jumped to, j_dest
+// 2. write processes for all instructions after j_dest until a STOP or another jump
+//		2.a if another jump, go back to 1
+// 3. ....
 
-#define goal1 stack_pos == 2;
-#define goal2 stack[1] == 7;
-#define goal3 stack[0] == 5;
-#define goal4 stack[0] == 12;
-#define goal5 failure == 0;
+// pretend count is held in memory for now...
+var ct = 0;
+P0() = PUSH(12);
+P1() = PUSH(ct);
+P2() = PUSH(ct);
+P3() = ADD();
+P4() = EQ(); 
+P5() = p{ct++;} -> Skip;
+// simulates a "jump if equal loop" yay for mutual recursion!
+// right now stack_pos doesn't get updated after so simulation will look weird
+P6() = [stack[stack_pos - 1] == 0]PJUMP0() [] [stack[stack_pos - 1] == 1]Skip;
+PJUMP0() = P0(); P1(); P2(); P3(); P4(); P5(); P6();
+P7() = STOP();
+PCONTRACT() = P0(); P1(); P2(); P3(); P4(); P5(); P6(); P7(); 
 
-
-#assert TEST1 reaches goal1;
-#assert TEST1 reaches goal2;
-#assert TEST1 reaches goal3;
-#assert TEST1 reaches goal4;
-#assert TEST1 |= [] goal5;
-#assert TEST1 deterministic;
+#define never_fail failure == 0;
+#define sufficient_gas gas > 0;
+#assert PCONTRACT |= [] never_fail;
+#assert PCONTRACT |= [] sufficient_gas;

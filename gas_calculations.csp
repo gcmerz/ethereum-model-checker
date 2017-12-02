@@ -1,11 +1,11 @@
-#include "gas_prices.csp"
-#include "environment_conditions.csp"
+#include "gas_prices.csp";
+#include "environment_conditions.csp";
 
 // TODO: Call, suicide, store
 
 // exp operation gas price
-GAS_EXP() = gas_exp{
-	if (stack[stack_pos - 2] = 0) {
+GAS_EXP(num_bytes) = gas_exp{
+	if (stack[stack_pos - 2] == 0) {
 		gas = gas - GEXP;
 	}
 	else {
@@ -13,7 +13,7 @@ GAS_EXP() = gas_exp{
 		// calculate the number of bytes
 		// maybe handle this in translation?
 		if(stack[stack_pos - 2] > 0) {
-			gas = gas - GEXP - (GEXPBYTE * 1);
+			gas = gas - GEXP - (GEXPBYTE * num_bytes);
 		}
 		else {
 			failure = 1;
@@ -27,9 +27,9 @@ GAS_DECREMENT(gas_arg) = gas_decrement{
 } -> Skip;
 
 // page 21 of ethereum yellow paper
-GAS_COPY() = GAS_DECREMENT(GVERYLOW + GCOPY * (stack[stack_pos - 3] + 1 / 32)));
+GAS_COPY() = GAS_DECREMENT((GVERYLOW + GCOPY * (stack[stack_pos - 3] + 1 / 32)));
 GAS_EXTCOPY() = GAS_DECREMENT((GEXTCODE + GCOPY * (stack[stack_pos - 4] + 1 / 32)));
-GAS_LOG(log_arg) = GAS_DECREMENT((GLOF + GLOGDATA * (stack[stack_pos - 2] +  (log_arg * GLOGTOPIC))));
+GAS_LOG(log_arg) = GAS_DECREMENT((GLOG + GLOGDATA * (stack[stack_pos - 2] +  (log_arg * GLOGTOPIC))));
 GAS_CREATE() = GAS_DECREMENT(GCREATE);
 GAS_JUMPDEST() = GAS_DECREMENT(GJUMPDEST);
 GAS_SLOAD() = GAS_DECREMENT(GSLOAD);

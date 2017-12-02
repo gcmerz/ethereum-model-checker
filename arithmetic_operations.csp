@@ -6,6 +6,7 @@
 // also, increment / decrement gas prices
 #include "environment_conditions.csp";
 #include "gas_prices.csp";
+#include "gas_calculations.csp";
 
 // stop, asserts we havne't already stopped and then changes flag
 STOP() =  stop{
@@ -15,7 +16,7 @@ STOP() =  stop{
 			else {
 				failure = 1; 
 			} 
-		} -> Stop;
+		} -> GAS_STOP(); 
 
 ADD() = add{
 		if(stack_pos >= 2 && execution_halt == 0) {
@@ -25,7 +26,7 @@ ADD() = add{
 		else {
 			failure = 1;
 		}
-	} -> Skip;
+	} -> GAS_ADD();
  
 MUL() = mul{
 		if(stack_pos >= 2 && execution_halt == 0) {
@@ -35,7 +36,7 @@ MUL() = mul{
 		else {
 			failure = 1;
 		}
-	} -> Skip;
+	} -> GAS_MUL();
 
 
 SUB() = sub{
@@ -46,7 +47,7 @@ SUB() = sub{
 		else {
 			failure = 1;
 		}
-	} -> Skip; 
+	} -> GAS_SUB(); 
 
 
 // division by 0 supported
@@ -64,7 +65,7 @@ DIV() = div{
 		else {
 			failure = 1;
 		}
-	} -> Skip;
+	} -> GAS_DIV();
 
 
 MOD() = mod{
@@ -81,7 +82,7 @@ MOD() = mod{
 		else {
 			failure = 1;
 		}
-	} -> Skip;
+	} -> GAS_MOD();
 
 ADDMOD() = addmod{
 			if (stack_pos > 3 && execution_halt == 0) {
@@ -97,7 +98,7 @@ ADDMOD() = addmod{
 			else {
 				failure = 1;
 			}
-	} -> Skip;
+	} -> GAS_ADDMOD();
 
 
 MULMOD() = mulmod{
@@ -114,10 +115,10 @@ MULMOD() = mulmod{
 			else {
 				failure = 1;
 			}
-	} -> Skip;
+	} -> GAS_MULMOD();
 
 
-EXP() = exp{
+EXP(num_bytes) = exp{
 		if (stack_pos >= 3 && execution_halt == 0) {
 				var count = stack[stack_pos - 1];
 				var elt = stack[stack_pos - 2];
@@ -131,4 +132,4 @@ EXP() = exp{
 		else {
 			failure = 1;
 		}
-	} -> Skip;
+	} -> GAS_EXP(num_bytes);

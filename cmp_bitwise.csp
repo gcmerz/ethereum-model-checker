@@ -2,7 +2,6 @@
 // declares comparison and bitwise logic operators
 #include "environment_conditions.csp";
 #include "gas_prices.csp";
-
 LT() = lt{
 	if (stack_pos >= 2 && execution_halt == 0) {
 		if (stack[stack_pos - 1] < stack[stack_pos - 2]) {
@@ -23,11 +22,11 @@ GT() = gt{
 	if (stack_pos >= 2 && execution_halt == 0) {
 		if (stack[stack_pos - 1] > stack[stack_pos - 2]) {
 			stack[stack_pos - 2] = 1;
-			stack[stack_pos]--;
+			stack_pos--;
 		}
 		else {
 			stack[stack_pos - 2] = 0;
-			stack[stack_pos]--;
+			stack_pos--;
 		}
 	}
 	else {
@@ -43,11 +42,11 @@ EQ() = eq{
 	if (stack_pos >= 2 && execution_halt == 0) {
 		if (stack[stack_pos - 1] == stack[stack_pos - 2]) {
 			stack[stack_pos - 2] = 1;
-			stack[stack_pos]--;
+			stack_pos--;
 		}
 		else {
 			stack[stack_pos - 2] = 0;
-			stack[stack_pos]--;
+			stack_pos--;
 		}
 	}
 	else {
@@ -82,7 +81,7 @@ AND() = and{
 
 XOR() = exor{
 	if (stack_pos >= 2 && execution_halt == 0) {
-		stack[stack_pos - 2] = stack[stack_pos - 1] ^ stack[stack_pos - 2];
+		stack[stack_pos - 2] = stack[stack_pos - 1] xor stack[stack_pos - 2];
 		stack_pos--;
 	}
 	else {
@@ -102,7 +101,7 @@ OR() = or{
 
 NOT() = not{
 	if (stack_pos >= 1 && execution_halt == 0) {
-		stack[stack_pos - 1] = ~stack[stack_pos - 1];
+		stack[stack_pos - 1] = stack[stack_pos - 1];
 	}
 	else {
 		failure = 1;

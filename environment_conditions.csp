@@ -8,10 +8,10 @@
 
 // let's define the stack as a size 1024 array for now
 var stack = [0(STACK_SIZE)]; 
+// how to represent memory? it's a lot :(
+var gas = 15;
 var stack_pos = 0;
 
 // define execution variables 
 var execution_halt = 0; 
 var failure = 0;
-
-FAILURE() = f{failure = 1; execution_halt = 1} -> Skip;

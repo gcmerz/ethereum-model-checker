@@ -1,8 +1,9 @@
 #include "environment_conditions.csp"; 
 #include "gas_prices.csp"; 
 
-// TODO: Need to figure out how to model the program counter, 
-// for now just give push arguments
+
+// push a value on the stack. this can represent push1...16 because we can directly 
+// deal with the opcode
 PUSH(push_arg) = push{
 			if (stack_pos < STACK_SIZE - 1 && execution_halt == 0) {
 				stack[stack_pos] = push_arg;
